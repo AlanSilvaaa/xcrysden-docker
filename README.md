@@ -27,3 +27,7 @@ this will
 | :---------------- | :------: | ----: | :------: | :------: |
 | Personal PC | teg57\Documents\xcrysden | <---------> | /mnt/data | Docker container |
 
+if you want to build the project locally:
+```bash
+docker build -t teg57/xcrysden:1.6.2 .
+```
