@@ -16,6 +16,11 @@ if you want to build the project locally:
 docker build -t teg57/xcrysden:1.6.2 .
 ```
 
+or build the min version:
+```bash
+docker build -f dockerfile-min -t teg57/xcrysden:1.6.2-min .
+```
+
 ## Usage
 ### xcrysden
 To run xcrysden, do:
@@ -44,3 +49,16 @@ docker run --rm -v "$env:USERPROFILE\Documents\xcrysden:/mnt/data" teg57/xcrysde
 note the following:
 - the file is located on `teg57\Documents\xcrysden`, and because that path is linked to the docker container, you can and should access using /mnt/data.
 - because we are not using xcrysden, it is not necesary to run the command with `-e DISPLAY=host.docker.internal:0.0` as before.
+
+> [!WARNING]
+> This only works if pulled the 1.6.2 version (not the min), because this contains all the features.
+
+## Tags
+### 1.6.2
+Contains xcrysden as well as features like a python script to convert .cif to .xsf files.
+
+### 1.6.2-min
+The minimal version. Only contains xcrysden, nothing more.
+
+## Author
+[@AlanSilvaaa](https://github.com/AlanSilvaaa/)
