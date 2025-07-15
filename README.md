@@ -60,5 +60,9 @@ Contains xcrysden as well as features like a python script to convert .cif to .x
 ### 1.6.2-min
 The minimal version. Only contains xcrysden, nothing more.
 
+```bash
+docker run --rm -e DISPLAY=host.docker.internal:0.0 -v "$env:USERPROFILE\Documents\xcrysden:/mnt/data" teg57/xcrysden:1.6.2-min
+```
+
 ## Author
 [@AlanSilvaaa](https://github.com/AlanSilvaaa/)
