@@ -17,7 +17,12 @@ RUN apt-get update && \
         libgfortran5 \
         wget \
         git \
-        python
+        python3 \
+        python3-pip \
+        zlib1g-dev \
+        libjpeg-dev
+
+RUN pip3 install ase
 
 RUN wget http://www.xcrysden.org/download/xcrysden-1.6.2-linux_x86_64-shared.tar.gz
 
@@ -26,6 +31,10 @@ RUN tar -xf xcrysden-1.6.2-linux_x86_64-shared.tar.gz && \
 
 RUN git clone https://github.com/AlanSilvaaa/xcrysden-docker
 
+COPY /app/xcrysden-docker/entrypoint.sh .
+RUN chmod +x entrypoint.sh
+
 WORKDIR /app/xcrysden-1.6.2-bin-shared
 
-CMD ["/bin/bash"]
+ENTRYPOINT ["/app/entrypoint.sh"]
+CMD ["./xcrysden"]
