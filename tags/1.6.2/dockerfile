@@ -8,20 +8,20 @@ RUN apt-get update && \
     ln -fs /usr/share/zoneinfo/Etc/UTC /etc/localtime && \
     dpkg-reconfigure -f noninteractive tzdata && \
     apt install -y \
-        tk \
-        libglu1-mesa \
-        libtogl2 \
-        libfftw3-3 \
-        libxmu6 \
-        imagemagick \
-        openbabel \
-        libgfortran5 \
-        wget \
-        git \
-        python3 \
-        python3-pip \
-        zlib1g-dev \
-        libjpeg-dev
+    tk \
+    libglu1-mesa \
+    libtogl2 \
+    libfftw3-3 \
+    libxmu6 \
+    imagemagick \
+    openbabel \
+    libgfortran5 \
+    wget \
+    git \
+    python3 \
+    python3-pip \
+    zlib1g-dev \
+    libjpeg-dev
 
 # Install Python package
 RUN pip3 install ase
@@ -32,11 +32,12 @@ RUN wget http://www.xcrysden.org/download/xcrysden-1.6.2-linux_x86_64-shared.tar
 RUN tar -xf xcrysden-1.6.2-linux_x86_64-shared.tar.gz && \
     rm xcrysden-1.6.2-linux_x86_64-shared.tar.gz
 
-# Clone the xcrysden-docker repository
-RUN git clone https://github.com/AlanSilvaaa/xcrysden-docker
+# Download python script and entrypoint
+RUN wget https://raw.githubusercontent.com/AlanSilvaaa/xcrysden-docker/refs/heads/main/tags/1.6.2/entrypoint.sh && \
+    wget https://raw.githubusercontent.com/AlanSilvaaa/xcrysden-docker/refs/heads/main/tags/1.6.2/convert_cif_to_xsf.py
 
 # Change working directory to the xcrysden-docker directory and copy the entrypoint script
 WORKDIR /app/xcrysden-1.6.2-bin-shared
-RUN chmod +x /app/xcrysden-docker/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
 
-ENTRYPOINT ["/app/xcrysden-docker/entrypoint.sh"]
+ENTRYPOINT ["/app/entrypoint.sh"]

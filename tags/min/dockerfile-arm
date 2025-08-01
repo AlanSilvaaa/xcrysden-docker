@@ -24,7 +24,7 @@ RUN sed -i 's/archive.ubuntu.com/old-releases.ubuntu.com/g' /etc/apt/sources.lis
     && apt-get clean
 
 # Download and extract source
-RUN wget https://github.com/AlanSilvaaa/xcrysden-docker/raw/refs/heads/main/xcrysden-arm64.tar.gz && \
+RUN wget https://github.com/AlanSilvaaa/xcrysden-docker/raw/refs/heads/main/binary/xcrysden-arm64.tar.gz && \
     tar -xvzf xcrysden-arm64.tar.gz && \
     rm xcrysden-arm64.tar.gz
 
