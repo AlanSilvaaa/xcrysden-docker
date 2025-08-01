@@ -1,0 +1,66 @@
+FROM ubuntu:18.04
+
+# ---------------------------------------------------
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=America/Santiago 
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+# ---------------------------------------------------
+
+WORKDIR /app
+
+# Install X libraries, xcrysden dependencies, VNC server, lightweight desktop,
+# AND essential build tools for Python packages, plus Python 3 and pip3.
+RUN apt-get update && \
+    apt install -y --no-install-recommends \ 
+    tk libglu1-mesa libtogl2 libfftw3-3 libxmu6 imagemagick openbabel libgfortran5 wget \
+    xvfb \           
+    x11vnc \         
+    fluxbox \        
+    xterm \          
+    python3 \        
+    python3-pip \    
+    git \            
+    build-essential \
+    libssl-dev \  
+    libffi-dev \ 
+    python3-dev \
+    gfortran \
+    tcl-dev \
+    tk-dev \
+    libglu1-mesa-dev \
+    libxi-dev \
+    libtogl-dev \
+    libfftw3-dev \
+    libxmu-dev \
+    x11-apps \
+    make
+
+# Upgrade pip and setuptools to ensure they are recent enough for complex packages like cryptography
+RUN pip3 install --upgrade pip setuptools
+
+# Install websockify and its dependencies via pip3
+# We explicitly install jwcrypto's dependencies that were failing.
+RUN pip3 install websockify cryptography jwcrypto setuptools-rust
+
+# Download and extract source
+RUN wget https://github.com/AlanSilvaaa/xcrysden-docker/raw/refs/heads/main/xcrysden-arm64.tar.gz && \
+    tar -xf xcrysden-arm64.tar.gz && \
+    mv xcrysden-1.6.2 xcrysden-1.6.2-bin-shared && \
+    rm xcrysden-arm64.tar.gz
+
+
+# --- ADD THESE LINES TO DOWNLOAD noVNC ---
+RUN git clone https://github.com/novnc/noVNC.git /opt/noVNC
+# ----------------------------------------
+
+WORKDIR /app/xcrysden-1.6.2-bin-shared
+
+# Create a script to start Xvfb, VNC, websockify, and xcrysden
+RUN wget https://raw.githubusercontent.com/AlanSilvaaa/xcrysden-docker/refs/heads/main/tags/web/start_xcrysden_web.sh -O /usr/local/bin/start_xcrysden_web.sh
+RUN chmod +x /usr/local/bin/start_xcrysden_web.sh
+
+# Expose both the VNC port (internal) and the web port (for noVNC)
+EXPOSE 5900
+EXPOSE 6080 
+
+CMD ["/usr/local/bin/start_xcrysden_web.sh"]
