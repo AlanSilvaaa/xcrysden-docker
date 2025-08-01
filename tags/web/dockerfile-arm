@@ -43,7 +43,7 @@ RUN pip3 install --upgrade pip setuptools
 RUN pip3 install websockify cryptography jwcrypto setuptools-rust
 
 # Download and extract source
-RUN wget https://github.com/AlanSilvaaa/xcrysden-docker/raw/refs/heads/main/xcrysden-arm64.tar.gz && \
+RUN wget https://github.com/AlanSilvaaa/xcrysden-docker/raw/refs/heads/main/binary/xcrysden-arm64.tar.gz && \
     tar -xf xcrysden-arm64.tar.gz && \
     mv xcrysden-1.6.2 xcrysden-1.6.2-bin-shared && \
     rm xcrysden-arm64.tar.gz
