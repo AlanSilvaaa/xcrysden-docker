@@ -31,7 +31,4 @@ RUN wget https://github.com/AlanSilvaaa/xcrysden-docker/raw/refs/heads/main/xcry
 # Compile XCrySDen
 WORKDIR /xcrysden/xcrysden-1.6.2
 
-# ENV DISPLAY host.docker.internal:0
-
 CMD ["./xcrysden"]
-
