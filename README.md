@@ -1,68 +1,58 @@
-# XCrySDen on docker
-Docker that can execute the [xcrysden](http://www.xcrysden.org/XCrySDen.html) app for analysis of crystalline structures and densities. Click [here](https://hub.docker.com/repository/docker/teg57/xcrysden/general) to go to the Docker Hub. 
+# XCrySDen on Docker
 
-## Requirements
-Have a X server on your local machine, e.g:
-- [xming](https://sourceforge.net/projects/xming/)
+Docker images for running [XCrySDen](http://www.xcrysden.org/XCrySDen.html), a crystalline and molecular structure visualization program. This project provides multi-architecture Docker images (amd64 and arm64) that eliminate the need to install XCrySDen locally.
 
-## Installation
-first download the image:
+Visit our [Docker Hub repository](https://hub.docker.com/repository/docker/teg57/xcrysden/general) to pull pre-built images.
+
+## Available Tags
+
+This project offers different Docker image variants to suit various use cases:
+
+### `teg57/xcrysden:1.6.2-web`
+**Web Interface Version** - Run XCrySDen in your browser using noVNC
+- No X server required
+- Access through web browser at `localhost:6080`
+- Perfect for Windows, macOS, and remote access
+- **📖 [Detailed Documentation](./tags/web/README.md)**
+
+### `teg57/xcrysden:1.6.2-min`
+**Minimal Version** - Direct X11 forwarding
+- Lightweight Docker image
+- Requires X server setup on host machine
+- Direct graphical interface
+- **📖 [Detailed Documentation](./tags/min/README.md)**
+
+## Quick Start
+
+### Web Version (Recommended for beginners)
 ```bash
-docker pull teg57/xcrysden:1.6.2
+docker run --init --rm -p 6080:6080 -v "$env:USERPROFILE\Documents\xcrysden:/mnt/data" teg57/xcrysden:1.6.2-web
 ```
+Then open `http://localhost:6080/vnc.html` in your browser.
 
-if you want to build the project locally:
+### Minimal Version (Requires X server)
 ```bash
-docker build -t teg57/xcrysden:1.6.2 .
+docker run --init --rm -e DISPLAY=host.docker.internal:0 -v "$env:USERPROFILE\Documents\xcrysden:/mnt/data" teg57/xcrysden:1.6.2-min
 ```
 
-or build the min version:
-```bash
-docker build -f dockerfile-min -t teg57/xcrysden:1.6.2-min .
-```
+## Getting Detailed Instructions
 
-## Usage
-### xcrysden
-To run xcrysden, do:
-```bash
-docker run --rm -e DISPLAY=host.docker.internal:0.0 -v "$env:USERPROFILE\Documents\xcrysden:/mnt/data" teg57/xcrysden:1.6.2
-```
+Each tag has its own comprehensive documentation with:
+- Complete setup instructions
+- Architecture-specific commands
+- Build instructions for local development
+- Troubleshooting guides
 
-this will
-- `docker run ... teg57/xcrysden`: start the docker file
-- `--rm`: remove the container once you finished
-- `-e DISPLAY=host.docker.internal:0.0`: export the host of you local machine to the docker to allow the container to find the X server IP.
-- `-v "$env:USERPROFILE\Documents\xcrysden:/mnt/data"`: create a mount point to access the files of you local machine from the docker container. By default, it chooses `your_username\Documents\xcrysden`, but you can change this depending on your needs or operating system. e.g. `/home/teg57/Downloads:/mnt/data`, this will show all the files of Downloads on the /mnt/data of the docker. Important to access files.
+**👉 Visit the [`tags/`](./tags/) folder and select your preferred version for detailed instructions.**
 
-Here is a little diagram that represents the comunication between the local PC and the docker container.
+## Key Features
 
-```
-(Personal PC) teg57\Documents\xcrysden <---------> /mnt/data (Docker container)
-```
-
-### .cif to .xsf
-Xcrysden cannot read .cif files like VESTA can, but you can convert it to a file that xcrysden can read, like .xsf. To do that, just add the flag `--convert` followed by the path of the file. Here is an example:
-
-```bash
-docker run --rm -v "$env:USERPROFILE\Documents\xcrysden:/mnt/data" teg57/xcrysden:1.6.2 --convert /mnt/data/5000108.cif
-```
-note the following:
-- the file is located on `teg57\Documents\xcrysden`, and because that path is linked to the docker container, you can and should access using /mnt/data.
-- because we are not using xcrysden, it is not necesary to run the command with `-e DISPLAY=host.docker.internal:0.0` as before.
-
-> [!WARNING]
-> This only works if pulled the 1.6.2 version (not the min), because this contains all the features.
-
-## Tags
-### 1.6.2
-Contains xcrysden as well as features like a python script to convert .cif to .xsf files.
-
-### 1.6.2-min
-The minimal version. Only contains xcrysden, nothing more.
-
-```bash
-docker run --rm -e DISPLAY=host.docker.internal:0.0 -v "$env:USERPROFILE\Documents\xcrysden:/mnt/data" teg57/xcrysden:1.6.2-min
-```
+- **Multi-architecture support**: Both amd64 and arm64
+- **Multiple interface options**: Web browser or direct X11
+- **Easy volume mounting**: Access your local files seamlessly
+- **Pre-built images**: No compilation required
+- **Comprehensive documentation**: Detailed guides for each variant
 
 ## Author
+
 [@AlanSilvaaa](https://github.com/AlanSilvaaa/)
